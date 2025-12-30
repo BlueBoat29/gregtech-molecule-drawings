@@ -4,9 +4,11 @@ This clientside only mod adds molecule drawings for organic molecules from GregT
 
 ## Examples
 
-|Polyethylene|Polybenzimidazole|Chloroform|
-|---|---|---|
-|![polyethylene tooltip screenshot](https://raw.githubusercontent.com/RubenVerg/gregtech-molecule-drawings/refs/heads/main/images/polyethylene.png)|![polybenzimidazole tooltip screenshot](https://raw.githubusercontent.com/RubenVerg/gregtech-molecule-drawings/refs/heads/main/images/polybenzimidazole.png)|![chloroform tooltip screenshot](https://raw.githubusercontent.com/RubenVerg/gregtech-molecule-drawings/refs/heads/main/images/chloroform.png)|
+| Color    |Polyethylene| Polybenzimidazole                                                                                                                                                     | Chloroform                                                                                                                                              |
+|----------|---|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| None     |![polyethylene tooltip screenshot](https://raw.githubusercontent.com/RubenVerg/gregtech-molecule-drawings/refs/heads/main/images/polyethylene.png)| ![polybenzimidazole tooltip screenshot](https://raw.githubusercontent.com/RubenVerg/gregtech-molecule-drawings/refs/heads/main/images/polybenzimidazole.png)          | ![chloroform tooltip screenshot](https://raw.githubusercontent.com/RubenVerg/gregtech-molecule-drawings/refs/heads/main/images/chloroform.png)          |
+| CPK      |![polyethylene tooltip screenshot](https://raw.githubusercontent.com/RubenVerg/gregtech-molecule-drawings/refs/heads/main/images/polyethylene.png)| ![polybenzimidazole tooltip screenshot](https://raw.githubusercontent.com/RubenVerg/gregtech-molecule-drawings/refs/heads/main/images/polybenzimidazole_color.png)    | ![chloroform tooltip screenshot](https://raw.githubusercontent.com/RubenVerg/gregtech-molecule-drawings/refs/heads/main/images/chloroform_color.png)    |
+| Material |![polyethylene tooltip screenshot](https://raw.githubusercontent.com/RubenVerg/gregtech-molecule-drawings/refs/heads/main/images/polyethylene.png)| ![polybenzimidazole tooltip screenshot](https://raw.githubusercontent.com/RubenVerg/gregtech-molecule-drawings/refs/heads/main/images/polybenzimidazole_matcolor.png) | ![chloroform tooltip screenshot](https://raw.githubusercontent.com/RubenVerg/gregtech-molecule-drawings/refs/heads/main/images/chloroform_matcolor.png) |
 
 ## Additional content support
 
@@ -29,6 +31,10 @@ MolDraw comes out of the box with support for not only most of the organic mater
 > The only thing I have to say is that it's peak.
 
 > Now I can appreciate how complex the polymers I'm building are.
+
+> This was already so cool and colors made it even better!
+
+> I should be allowed to give Michelin stars to Gregtech add-ons because Madeline is cooking things right.
 
 ## Adding your own molecules
 
@@ -190,8 +196,8 @@ For example, this is the encoding of benzene:
     },
     {
       "type": "bond",
-      "a": 4
-      "b": 5,
+      "a": 4,
+      "b": 5
     },
     {
       "type": "bond",
@@ -200,5 +206,30 @@ For example, this is the encoding of benzene:
       "lines": ["solid", "solid"]
     }
   ]
+}
+```
+
+
+## Adding your own alloys
+
+Similarly, alloys are stored in resource packs under `assets/<namespace>/alloys/<compound>.json`, corresponding to the GT material with ID `<namespace>:<compound>`.
+
+In the simplest case, a material just needs to be marked as being an alloy, and then its composition can be computed automatically via GregTech's material composition system. In that case, just put the following file in the correct place:
+
+```json
+{
+  "derive": true
+}
+```
+
+If you want to specify components manually, such as to indicate impurities not present in the material composition, alloys follow this simple schema:
+
+```ts
+// A material ID and an integer amount, which defaults to 1
+type Datum = string | [string, number];
+
+// An alloy JSON file is of type Alloy
+interface Alloy {
+  components: Datum[];
 }
 ```
