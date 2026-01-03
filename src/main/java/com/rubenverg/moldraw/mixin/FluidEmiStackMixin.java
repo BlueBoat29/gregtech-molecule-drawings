@@ -13,6 +13,8 @@ import net.minecraft.world.level.material.Fluid;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.rubenverg.moldraw.*;
+import com.rubenverg.moldraw.component.AlloyTooltipComponent;
+import com.rubenverg.moldraw.component.MoleculeTooltipComponent;
 import dev.emi.emi.api.stack.FluidEmiStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -84,11 +86,11 @@ public class FluidEmiStackMixin {
         final var insertAt = quantityIdx.stream().map(i -> i + 1).findFirst().orElse(1);
 
         if (!MolDrawConfig.INSTANCE.onlyShowOnShift || GTUtil.isShiftDown()) {
-            if (!Objects.isNull(mol)) {
+            if (!Objects.isNull(mol) && MolDrawConfig.INSTANCE.molecule.showMolecules) {
                 if (idx.isPresent())
                     list.set(idx.getAsInt(), ClientTooltipComponent.create(new MoleculeTooltipComponent(mol)));
                 else list.add(insertAt, ClientTooltipComponent.create(new MoleculeTooltipComponent(mol)));
-            } else if (!Objects.isNull(alloy)) {
+            } else if (!Objects.isNull(alloy) && MolDrawConfig.INSTANCE.alloy.showAlloys) {
                 if (idx.isPresent())
                     list.set(idx.getAsInt(), ClientTooltipComponent.create(new AlloyTooltipComponent(alloy)));
                 else list.add(insertAt, ClientTooltipComponent.create(new AlloyTooltipComponent(alloy)));
@@ -106,10 +108,10 @@ public class FluidEmiStackMixin {
             if (MolDrawConfig.INSTANCE.onlyShowOnShift) {
                 final int ttIndex = idx.orElse(insertAt) + 1;
 
-                if (Objects.nonNull(mol)) {
+                if (Objects.nonNull(mol) && MolDrawConfig.INSTANCE.molecule.showMolecules) {
                     list.add(ttIndex, ClientTooltipComponent.create(
                             Component.translatable("tooltip.moldraw.shift_view_molecule").getVisualOrderText()));
-                } else if (Objects.nonNull(alloy)) {
+                } else if (Objects.nonNull(alloy) && MolDrawConfig.INSTANCE.alloy.showAlloys) {
                     list.add(ttIndex, ClientTooltipComponent
                             .create(Component.translatable("tooltip.moldraw.shift_view_alloy").getVisualOrderText()));
                 }

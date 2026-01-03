@@ -36,6 +36,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.datafixers.util.Either;
+import com.rubenverg.moldraw.component.AlloyTooltipComponent;
+import com.rubenverg.moldraw.component.MoleculeTooltipComponent;
 import com.rubenverg.moldraw.data.AlloysData;
 import com.rubenverg.moldraw.data.MoleculesData;
 import com.rubenverg.moldraw.molecule.*;
@@ -273,11 +275,11 @@ public class MolDraw {
                 .reduce((a, b) -> b);
 
         if (!MolDrawConfig.INSTANCE.onlyShowOnShift || GTUtil.isShiftDown()) {
-            if (!Objects.isNull(mol)) {
+            if (!Objects.isNull(mol) && MolDrawConfig.INSTANCE.molecule.showMolecules) {
                 if (idx.isPresent())
                     tooltipElements.set(idx.getAsInt(), Either.right(new MoleculeTooltipComponent(mol)));
                 else tooltipElements.add(1, Either.right(new MoleculeTooltipComponent(mol)));
-            } else if (!Objects.isNull(alloy)) {
+            } else if (!Objects.isNull(alloy) && MolDrawConfig.INSTANCE.alloy.showAlloys) {
                 if (idx.isPresent())
                     tooltipElements.set(idx.getAsInt(), Either.right(new AlloyTooltipComponent(alloy)));
                 else tooltipElements.add(1, Either.right(new AlloyTooltipComponent(alloy)));
@@ -295,10 +297,10 @@ public class MolDraw {
             if (MolDrawConfig.INSTANCE.onlyShowOnShift) {
                 final int ttIndex = idx.orElse(1) + 1;
 
-                if (Objects.nonNull(mol)) {
+                if (Objects.nonNull(mol) && MolDrawConfig.INSTANCE.molecule.showMolecules) {
                     tooltipElements.add(ttIndex, Either.left(FormattedText
                             .of(Component.translatable("tooltip.moldraw.shift_view_molecule").getString())));
-                } else if (Objects.nonNull(alloy)) {
+                } else if (Objects.nonNull(alloy) && MolDrawConfig.INSTANCE.alloy.showAlloys) {
                     tooltipElements.add(ttIndex, Either.left(
                             FormattedText.of(Component.translatable("tooltip.moldraw.shift_view_alloy").getString())));
                 }

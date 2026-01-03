@@ -9,10 +9,10 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.mojang.datafixers.util.Either;
-import com.rubenverg.moldraw.AlloyTooltipComponent;
 import com.rubenverg.moldraw.MolDraw;
 import com.rubenverg.moldraw.MolDrawConfig;
-import com.rubenverg.moldraw.MoleculeTooltipComponent;
+import com.rubenverg.moldraw.component.AlloyTooltipComponent;
+import com.rubenverg.moldraw.component.MoleculeTooltipComponent;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.common.gui.JeiTooltip;
 import mezz.jei.forge.platform.FluidHelper;
@@ -49,11 +49,11 @@ public class FluidHelperMixin {
                 .reduce((a, b) -> b);
 
         if (!MolDrawConfig.INSTANCE.onlyShowOnShift || GTUtil.isShiftDown()) {
-            if (!Objects.isNull(mol)) {
+            if (!Objects.isNull(mol) && MolDrawConfig.INSTANCE.molecule.showMolecules) {
                 if (idx.isPresent())
                     tooltipElements.set(idx.getAsInt(), Either.right(new MoleculeTooltipComponent(mol)));
                 else tooltipElements.add(1, Either.right(new MoleculeTooltipComponent(mol)));
-            } else if (!Objects.isNull(alloy)) {
+            } else if (!Objects.isNull(alloy) && MolDrawConfig.INSTANCE.alloy.showAlloys) {
                 if (idx.isPresent())
                     tooltipElements.set(idx.getAsInt(), Either.right(new AlloyTooltipComponent(alloy)));
                 else tooltipElements.add(1, Either.right(new AlloyTooltipComponent(alloy)));
@@ -71,10 +71,10 @@ public class FluidHelperMixin {
             if (MolDrawConfig.INSTANCE.onlyShowOnShift) {
                 final int ttIndex = idx.orElse(1) + 1;
 
-                if (Objects.nonNull(mol)) {
+                if (Objects.nonNull(mol) && MolDrawConfig.INSTANCE.molecule.showMolecules) {
                     tooltipElements.add(ttIndex, Either.left(FormattedText
                             .of(Component.translatable("tooltip.moldraw.shift_view_molecule").getString())));
-                } else if (Objects.nonNull(alloy)) {
+                } else if (Objects.nonNull(alloy) && MolDrawConfig.INSTANCE.alloy.showAlloys) {
                     tooltipElements.add(ttIndex, Either.left(
                             FormattedText.of(Component.translatable("tooltip.moldraw.shift_view_alloy").getString())));
                 }
